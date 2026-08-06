@@ -16,10 +16,16 @@ def validate_notebook(path: Path) -> list[str]:
     errors: list[str] = []
     notebook = nbformat.read(path, as_version=4)
     text = "\n".join(cell.source for cell in notebook.cells)
+    header = notebook.cells[0].source if notebook.cells else ""
     if NOTICE_FRAGMENT not in text:
         errors.append("aviso educacional ausente")
     if "colab.research.google.com/github/" not in text:
         errors.append("botão Colab ausente")
+    if any(line.startswith("    ") for line in header.splitlines() if line.strip()):
+        errors.append("cabeçalho Markdown contém bloco de código por indentação")
+    source_section = header.partition("## Fonte e licença")[2]
+    if not source_section or "](" not in source_section:
+        errors.append("fonte descritiva sem link no cabeçalho")
     if "Três aprendizados principais" not in text:
         errors.append("síntese final ausente")
     if "Versões" not in text:
@@ -48,4 +54,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

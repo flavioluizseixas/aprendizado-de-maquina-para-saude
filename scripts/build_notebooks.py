@@ -13,6 +13,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "notebooks"
 REPO = "flavioluizseixas/aprendizado-de-maquina-para-saude"
+UCI_DIABETES_URL = "https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators"
+MEDMNIST_INFO_URL = "https://github.com/MedMNIST/MedMNIST/blob/main/medmnist/info.py"
+RDATASETS_LUNG_URL = "https://vincentarelbundock.github.io/Rdatasets/doc/survival/lung.html"
+INFODENGUE_API_URL = "https://info.dengue.mat.br/tutorial_api_python/locale-en"
 NOTICE = (
     "Este material tem finalidade exclusivamente educacional. Os resultados não "
     "devem ser usados para diagnóstico, prognóstico, tratamento, gestão assistencial "
@@ -55,26 +59,13 @@ def header(
     )
     return [
         markdown(
-            f"""
-            # {number} — {title}
-
-            [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]({colab})
-
-            **Duração estimada:** {duration}  
-            **Pré-requisitos:** {prerequisites}
-
-            ## Objetivos
-
-            {goals}
-
-            ## Fonte e licença
-
-            {source}
-
-            {license_note}
-
-            > **Uso responsável:** {NOTICE}
-            """
+            f"# {number} — {title}\n\n"
+            f"[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]({colab})\n\n"
+            f"**Duração estimada:** {duration}  \n"
+            f"**Pré-requisitos:** {prerequisites}\n\n"
+            f"## Objetivos\n\n{goals}\n\n"
+            f"## Fonte e licença\n\n{source}\n\n{license_note}\n\n"
+            f"> **Uso responsável:** {NOTICE}"
         )
     ]
 
@@ -173,7 +164,9 @@ def notebook_01() -> list[dict]:
             "discutir autorrelato, associação e limites de generalização",
         ],
         "Python inicial, pandas e leitura de gráficos.",
-        "CDC Diabetes Health Indicators (BRFSS), obtida da UCI, conjunto 891.",
+        f"[CDC Diabetes Health Indicators — descrição das variáveis]({UCI_DIABETES_URL}), "
+        "conjunto 891 da UCI, derivado do BRFSS. Consulte a tabela de variáveis para "
+        "interpretar os códigos dos atributos, como 0 e 1.",
         "Consulte a licença CC BY 4.0 e a citação exibidas na página da UCI.",
     )
     cells += [
@@ -296,7 +289,9 @@ def notebook_02() -> list[dict]:
             "investigar o modelo com permutação e SHAP sem alegar causalidade",
         ],
         "Notebook 01 ou noções de pandas e classificação binária.",
-        "CDC Diabetes Health Indicators (UCI 891), derivada do BRFSS.",
+        f"[CDC Diabetes Health Indicators — descrição das variáveis]({UCI_DIABETES_URL}), "
+        "conjunto 891 da UCI, derivado do BRFSS. Consulte a tabela de variáveis para "
+        "interpretar os códigos dos atributos, como 0 e 1.",
         "Fonte UCI sob CC BY 4.0; cite o conjunto e sua publicação.",
     )
     cells += [
@@ -476,7 +471,9 @@ def notebook_03() -> list[dict]:
             "caracterizar clusters sem chamá-los de fenótipos clínicos",
         ],
         "Notebook 01 e noções de distância.",
-        "CDC Diabetes Health Indicators (UCI 891). O alvo será excluído do agrupamento.",
+        f"[CDC Diabetes Health Indicators — descrição das variáveis]({UCI_DIABETES_URL}), "
+        "conjunto 891 da UCI. Consulte a tabela de variáveis para interpretar os códigos "
+        "dos atributos, como 0 e 1. O alvo será excluído do agrupamento.",
         "Fonte UCI sob CC BY 4.0; cite o conjunto e sua publicação.",
     )
     cells += [
@@ -606,7 +603,9 @@ def notebook_04() -> list[dict]:
             "comparar o modelo padrão e ajustado no teste intacto",
         ],
         "Notebook 02 e noções de validação cruzada.",
-        "CDC Diabetes Health Indicators (UCI 891).",
+        f"[CDC Diabetes Health Indicators — descrição das variáveis]({UCI_DIABETES_URL}), "
+        "conjunto 891 da UCI. Consulte a tabela de variáveis para interpretar os códigos "
+        "dos atributos, como 0 e 1.",
         "Fonte UCI sob CC BY 4.0; cite o conjunto e sua publicação.",
     )
     cells += [
@@ -747,7 +746,8 @@ def notebook_05() -> list[dict]:
             "gerar Grad-CAM e discutir seus limites",
         ],
         "Classificação binária, matrizes e noções iniciais de redes convolucionais.",
-        "PneumoniaMNIST/MedMNIST+, radiografias pediátricas reduzidas para 64 × 64.",
+        f"[PneumoniaMNIST/MedMNIST+ — descrição e rótulos]({MEDMNIST_INFO_URL}), "
+        "radiografias pediátricas reduzidas para 64 × 64; 0=normal e 1=pneumonia.",
         "MedMNIST é CC BY 4.0; a fonte original do subconjunto é de Kermany et al. O conjunto não se destina a uso clínico.",
     )
     cells += [
@@ -936,7 +936,9 @@ def notebook_06() -> list[dict]:
             "verificar proporcionalidade e comparar estratificação",
         ],
         "Estatística básica e interpretação de intervalos de confiança.",
-        "NCCTG Lung Cancer, do pacote R survival, acessada pelo Rdatasets.",
+        f"[NCCTG Lung Cancer — descrição das variáveis]({RDATASETS_LUNG_URL}), "
+        "do pacote R survival, acessada pelo Rdatasets. A documentação explica códigos "
+        "como status 1=censurado/2=óbito e sexo 1=masculino/2=feminino.",
         "Use os termos do pacote survival/Rdatasets e cite a documentação original.",
     )
     cells += [
@@ -1100,7 +1102,8 @@ def notebook_07() -> list[dict]:
             "discutir escolhas normativas da recompensa",
         ],
         "Python, arrays e noções de séries temporais.",
-        "Série semanal real da API InfoDengue; ações, estoques e recompensas são sintéticos.",
+        f"Série semanal real da [API InfoDengue — descrição e acesso]({INFODENGUE_API_URL}); "
+        "ações, estoques e recompensas são sintéticos.",
         "Consulte os termos do InfoDengue. A simulação não representa tratamento nem decisão clínica.",
     )
     cells += [
@@ -1262,7 +1265,8 @@ def notebook_08() -> list[dict]:
             "avaliar erros e limites epidemiológicos",
         ],
         "Regressão supervisionada e noções de séries temporais.",
-        "Série semanal real da API InfoDengue, Niterói, 2016–2025.",
+        f"Série semanal real da [API InfoDengue — descrição e acesso]({INFODENGUE_API_URL}), "
+        "Niterói, 2016–2025.",
         "Consulte os termos do InfoDengue; notificações e estimativas podem ser revistas.",
     )
     cells += [

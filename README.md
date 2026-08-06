@@ -44,12 +44,31 @@ O caminho recomendado é clicar em **Abrir** na tabela e escolher `Executar tudo
 Para executar localmente:
 
 ```bash
+git clone https://github.com/flavioluizseixas/aprendizado-de-maquina-para-saude.git
+cd aprendizado-de-maquina-para-saude
 python -m venv .venv
-# Linux/macOS: source .venv/bin/activate
-# Windows: .venv\Scripts\activate
+```
+
+Ative o ambiente virtual:
+
+```powershell
+# Windows PowerShell
+.\.venv\Scripts\Activate.ps1
+```
+
+```bash
+# Linux/macOS
+source .venv/bin/activate
+```
+
+Instale o projeto com todas as dependências dos notebooks e inicie o Jupyter a partir da raiz do repositório:
+
+```bash
 python -m pip install -e ".[dev,notebooks]"
 jupyter lab
 ```
+
+Não é necessário editar os notebooks: a célula de preparação detecta a execução fora do Colab, localiza a raiz do projeto e instala somente os pacotes que ainda estejam ausentes no ambiente do kernel.
 
 Os notebooks têm `FAST_MODE = True` por padrão para uma primeira execução econômica. Desative-o para aumentar amostras, épocas, iterações ou episódios; as validações obrigatórias continuam usando cinco folds.
 
