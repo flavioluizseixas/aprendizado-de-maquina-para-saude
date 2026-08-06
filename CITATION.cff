@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "Se você usar este material, cite o repositório e as bases indicadas nos notebooks."
+title: "Aprendizado de Máquina para Saúde — hands-on"
+type: software
+authors:
+  - family-names: Seixas
+    given-names: Flavio Luiz
+version: 1.0.0
+date-released: 2026-08-05
+url: "https://github.com/flavioluizseixas/aprendizado-de-maquina-para-saude"
+license: MIT
+

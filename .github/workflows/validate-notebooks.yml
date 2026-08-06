@@ -1,0 +1,25 @@
+name: Validar notebooks e funções
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Instalar pacote e ferramentas de teste
+        run: python -m pip install -e ".[dev]"
+      - name: Testes unitários
+        run: python -m pytest
+      - name: Validar JSON e sintaxe dos notebooks
+        run: python scripts/validate_notebooks.py
+      - name: Smoke test de importações
+        run: python scripts/smoke_fast.py
