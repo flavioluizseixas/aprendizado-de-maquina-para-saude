@@ -8,7 +8,7 @@ Coleção de oito experimentos progressivos, em português, para estudar aprendi
 
 | Nº | Tema | Base | Duração | Colab |
 |---:|---|---|---:|---|
-| 01 | Estatística descritiva | CDC Diabetes | 45–60 min | [Abrir](https://colab.research.google.com/github/flavioluizseixas/aprendizado-de-maquina-para-saude/blob/main/notebooks/01_estatistica_descritiva.ipynb) |
+| 01 | Estatística descritiva | CDC Diabetes | 60–75 min | [Abrir](https://colab.research.google.com/github/flavioluizseixas/aprendizado-de-maquina-para-saude/blob/main/notebooks/01_estatistica_descritiva.ipynb) |
 | 02 | Supervisionado e SHAP | CDC Diabetes | 75–90 min | [Abrir](https://colab.research.google.com/github/flavioluizseixas/aprendizado-de-maquina-para-saude/blob/main/notebooks/02_aprendizado_supervisionado.ipynb) |
 | 03 | K-means e PCA | CDC Diabetes | 60–75 min | [Abrir](https://colab.research.google.com/github/flavioluizseixas/aprendizado-de-maquina-para-saude/blob/main/notebooks/03_aprendizado_nao_supervisionado.ipynb) |
 | 04 | Modelos e hiperparâmetros | CDC Diabetes | 75–90 min | [Abrir](https://colab.research.google.com/github/flavioluizseixas/aprendizado-de-maquina-para-saude/blob/main/notebooks/04_comparacao_modelos_hiperparametros.ipynb) |
@@ -67,6 +67,20 @@ Instale o projeto com todas as dependências dos notebooks e inicie o Jupyter a 
 python -m pip install -e ".[dev,notebooks]"
 jupyter lab
 ```
+
+Para instalar somente as dependências de um encontro, substitua `dev,notebooks` pelo extra correspondente:
+
+| Encontro | Extra local |
+|---:|---|
+| 02 | `supervised` |
+| 03 | `clustering` |
+| 04 | `model-comparison` |
+| 05 | `imaging` |
+| 06 | `survival` |
+| 07 | `reinforcement` |
+| 08 | `time-series` |
+
+Por exemplo: `python -m pip install -e ".[clustering]"` instala o necessário ao encontro 03.
 
 Não é necessário editar os notebooks: a célula de preparação detecta a execução fora do Colab, localiza a raiz do projeto e instala somente os pacotes que ainda estejam ausentes no ambiente do kernel.
 

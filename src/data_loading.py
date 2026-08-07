@@ -86,6 +86,9 @@ def load_cdc_diabetes(
     )
     data = _sample_rows(data, target_name, sample_size, random_state, stratify)
     metadata = dict(getattr(dataset, "metadata", {}) or {})
+    variables = getattr(dataset, "variables", None)
+    if variables is not None:
+        metadata["variables"] = variables.copy()
     metadata.update(
         {
             "uci_id": 891,

@@ -14,6 +14,12 @@ def test_load_cdc_diabetes_uses_stratified_reproducible_sample(monkeypatch):
     fake_dataset = SimpleNamespace(
         data=SimpleNamespace(features=features, targets=targets),
         metadata={"name": "fake"},
+        variables=pd.DataFrame(
+            {
+                "name": ["HighBP", "Diabetes_binary"],
+                "description": ["0 = no, 1 = yes", "0 = no diabetes, 1 = diabetes"],
+            }
+        ),
     )
     monkeypatch.setitem(
         sys.modules,
@@ -28,6 +34,7 @@ def test_load_cdc_diabetes_uses_stratified_reproducible_sample(monkeypatch):
     assert len(first) == 20
     assert first["Diabetes_binary"].sum() == 4
     assert metadata["uci_id"] == 891
+    assert metadata["variables"].iloc[0]["name"] == "HighBP"
 
 
 def test_infer_feature_types_keeps_target_out_of_numeric():

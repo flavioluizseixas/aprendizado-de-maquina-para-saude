@@ -30,6 +30,11 @@ def validate_notebook(path: Path) -> list[str]:
         errors.append("síntese final ausente")
     if "Versões" not in text:
         errors.append("registro de versões ausente")
+    if path.name[:2] in {f"{number:02d}" for number in range(2, 9)}:
+        if "## Onde executar" not in text or "### Computador local" not in text:
+            errors.append("instruções de execução Colab/local ausentes")
+        if "Dicionário" not in text:
+            errors.append("dicionário de dados ou rótulos ausente")
     for index, cell in enumerate(notebook.cells):
         if cell.cell_type == "code":
             try:
