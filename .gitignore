@@ -16,3 +16,4 @@ data/cache/*
 *.npz
 *.h5
 *.keras
+.DS_store

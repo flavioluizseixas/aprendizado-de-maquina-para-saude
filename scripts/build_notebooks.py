@@ -214,24 +214,21 @@ def notebook_01() -> list[dict]:
             import pandas as pd
             import seaborn as sns
             from scipy.stats import chi2_contingency, pointbiserialr
-            from sklearn.model_selection import train_test_split
             from statsmodels.graphics.mosaicplot import mosaic
 
             from src.data_loading import load_cdc_diabetes
             from src.visualization import plot_variable
 
-            FAST_MODE = True
-            SAMPLE_SIZE = 20_000 if FAST_MODE else None  # None preserva a base completa
             sns.set_theme(style="whitegrid")
             """
         ),
         markdown(
             "## Pergunta orientadora\n\n> Como se distribuem indicadores autorrelatados de saúde nesta amostra, e quais conclusões eles não sustentam?"
         ),
-        markdown("## Obtenção dos dados\n\n> A fonte e a amostragem ficaram registradas?"),
+        markdown("## Obtenção dos dados\n\n> A fonte e o tamanho da base ficaram registrados?"),
         code(
             """
-            data, metadata = load_cdc_diabetes(SAMPLE_SIZE, random_state=RANDOM_STATE)
+            data, metadata = load_cdc_diabetes()
             print({key: metadata.get(key) for key in ["name", "uci_id", "target", "sample_size"]})
             print(metadata["feature_types"])
             """
@@ -335,7 +332,7 @@ def notebook_01() -> list[dict]:
         markdown(
             "### Como interpretar\n\nPara BMI, mediana e IQR são resistentes a extremos. Para variáveis binárias e ordinais, percentuais preservam uma leitura mais direta. Diferenças entre grupos são associações descritivas, não efeitos causais."
         ),
-        markdown("## Avaliação visual conjunta\n\n> É possível observar relações sem desenhar 250 mil pontos?"),
+        markdown("## Avaliação visual conjunta\n\n> Que relações aparecem entre os indicadores?"),
         code(
             """
             pair_frame = pd.DataFrame({
@@ -344,20 +341,15 @@ def notebook_01() -> list[dict]:
                 "Saúde mental ruim (dias/30)": data["MentHlth"],
                 "Indicador de diabetes": data["Diabetes_binary"].map(outcome_labels),
             })
-            pair_n = min(1_000, len(data) - 1)
-            pair_sample, _ = train_test_split(
-                pair_frame, train_size=pair_n,
-                stratify=data["Diabetes_binary"], random_state=RANDOM_STATE,
-            )
             sns.pairplot(
-                pair_sample, hue="Indicador de diabetes", corner=True,
+                pair_frame, hue="Indicador de diabetes", corner=True,
                 plot_kws={"alpha": 0.35, "s": 18},
             )
             plt.show()
             """
         ),
         markdown(
-            "### Como interpretar\n\nA amostra estratificada de até 1.000 linhas torna o `pairplot` legível e rápido, preservando aproximadamente as classes. Os eixos contêm apenas medidas numéricas; a categoria aparece na legenda com seu significado. Sobreposição indica que um atributo isolado dificilmente separa perfeitamente os grupos."
+            "### Como interpretar\n\nOs eixos contêm apenas medidas numéricas; a categoria aparece na legenda com seu significado. Sobreposição indica que um atributo isolado dificilmente separa perfeitamente os grupos."
         ),
         markdown(
             "## Comparações bivariadas adequadas ao tipo\n\n"
