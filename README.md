@@ -17,6 +17,8 @@ Coleção de oito experimentos progressivos, em português, para estudar aprendi
 | 07 | Reforço | InfoDengue | 75–90 min | [Abrir](https://colab.research.google.com/github/flavioluizseixas/aprendizado-de-maquina-para-saude/blob/main/notebooks/07_aprendizado_reforco.ipynb) |
 | 08 | Séries temporais | InfoDengue | 75–90 min | [Abrir](https://colab.research.google.com/github/flavioluizseixas/aprendizado-de-maquina-para-saude/blob/main/notebooks/08_series_temporais.ipynb) |
 
+Para uma introdução curta ao encontro 02, use a [versão mínima de regressão logística](notebooks/02_aprendizado_supervisionado_versão_minima.ipynb): split, padronização, treinamento, métricas e coeficientes em quatro células de código.
+
 ## O que você aprenderá
 
 - exploração e visualização responsável de dados observacionais;

@@ -9,6 +9,7 @@ import nbformat
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOKS = sorted((ROOT / "notebooks").glob("*.ipynb"))
+MINIMAL_NOTEBOOK = "02_aprendizado_supervisionado_versão_minima.ipynb"
 NOTICE_FRAGMENT = "finalidade exclusivamente educacional"
 
 
@@ -26,15 +27,17 @@ def validate_notebook(path: Path) -> list[str]:
     source_section = header.partition("## Fonte e licença")[2]
     if not source_section or "](" not in source_section:
         errors.append("fonte descritiva sem link no cabeçalho")
-    if "Três aprendizados principais" not in text:
-        errors.append("síntese final ausente")
-    if "Versões" not in text:
-        errors.append("registro de versões ausente")
-    if path.name[:2] in {f"{number:02d}" for number in range(2, 9)}:
-        if "## Onde executar" not in text or "### Computador local" not in text:
-            errors.append("instruções de execução Colab/local ausentes")
-        if "Dicionário" not in text:
-            errors.append("dicionário de dados ou rótulos ausente")
+    # A versão mínima mantém apenas o fluxo solicitado, sem as seções do roteiro completo.
+    if path.name != MINIMAL_NOTEBOOK:
+        if "Três aprendizados principais" not in text:
+            errors.append("síntese final ausente")
+        if "Versões" not in text:
+            errors.append("registro de versões ausente")
+        if path.name[:2] in {f"{number:02d}" for number in range(2, 9)}:
+            if "## Onde executar" not in text or "### Computador local" not in text:
+                errors.append("instruções de execução Colab/local ausentes")
+            if "Dicionário" not in text:
+                errors.append("dicionário de dados ou rótulos ausente")
     for index, cell in enumerate(notebook.cells):
         if cell.cell_type == "code":
             try:
@@ -47,8 +50,11 @@ def validate_notebook(path: Path) -> list[str]:
 
 
 def main() -> None:
-    if len(NOTEBOOKS) != 8:
-        raise SystemExit(f"Esperados 8 notebooks; encontrados {len(NOTEBOOKS)}.")
+    full_notebooks = [path for path in NOTEBOOKS if path.name != MINIMAL_NOTEBOOK]
+    if len(full_notebooks) != 8:
+        raise SystemExit(f"Esperados 8 notebooks completos; encontrados {len(full_notebooks)}.")
+    if not any(path.name == MINIMAL_NOTEBOOK for path in NOTEBOOKS):
+        raise SystemExit(f"Notebook mínimo ausente: {MINIMAL_NOTEBOOK}.")
     failures = {path.name: validate_notebook(path) for path in NOTEBOOKS}
     failures = {name: errors for name, errors in failures.items() if errors}
     if failures:
