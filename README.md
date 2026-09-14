@@ -19,7 +19,7 @@ Coleção de oito experimentos progressivos, em português, para estudar aprendi
 
 Para uma introdução curta ao encontro 01, use a [versão mínima de estatística descritiva](notebooks/01_estatistica_descritiva_versão_minima.ipynb): inspeção dos dados, resumo do IMC, frequências e comparação entre grupos em quatro células de código.
 
-Para uma introdução curta ao encontro 02, use a [versão mínima de regressão logística](notebooks/02_aprendizado_supervisionado_versão_minima.ipynb): split, padronização, treinamento, métricas, coeficientes, odds e odds ratios em seis células de código. O [enunciado da atividade em Word](tarefas/Tarefa_2_Aprendizado_Supervisionado_Versao_Minima.docx) acompanha esse roteiro.
+Para uma introdução curta ao encontro 02, use a [versão mínima de regressão logística](notebooks/02_aprendizado_supervisionado_versão_minima.ipynb): split, padronização, treinamento, métricas, coeficientes, odds e odds ratios, com uma tabela final de IC95% e valores-p de um ajuste sem penalização, em sete células de código. O [enunciado da atividade em Word](tarefas/Tarefa_2_Aprendizado_Supervisionado_Versao_Minima.docx) acompanha esse roteiro.
 
 ## O que você aprenderá
 

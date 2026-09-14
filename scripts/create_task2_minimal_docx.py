@@ -125,7 +125,7 @@ def build_document():
     add_text(p, NOTEBOOK, bold=True, size=9)
     document.add_paragraph(
         "Use o arquivo fornecido com esta atividade. Abra-o no Google Colab ou no Jupyter. "
-        "São necessários numpy, pandas e scikit-learn, além de internet para carregar os dados."
+        "São necessários numpy, pandas, scikit-learn e statsmodels, além de internet para carregar os dados."
     )
     p = document.add_paragraph("Fonte e dicionário: ")
     add_hyperlink(p, "CDC Diabetes Health Indicators — UCI 891", SOURCE)
@@ -193,7 +193,7 @@ def build_document():
     )
 
     document.add_page_break()
-    document.add_heading("Odds ratio e entrega", level=1)
+    document.add_heading("Odds ratio, significância e entrega", level=1)
     item(document, "6. Odds ratio a partir dos coeficientes", [
         "Apresente, para todos os atributos, coeficiente padronizado, escala de treino, "
         "coeficiente original, OR para +1 unidade padronizada e OR para +1 unidade original.",
@@ -211,6 +211,12 @@ def build_document():
     add_bullet(document, "Explique por que exp(β_HighBP), calculada diretamente do coeficiente "
                "padronizado, não representa a comparação de 1 versus 0. Para Age, esclareça "
                "por que +1 no código não significa +1 ano.")
+    add_bullet(document, "Na seção 5.3, ajuste também um GLM binomial sem penalização, com "
+               "intercepto, os mesmos atributos nas unidades originais e somente os dados de treino. "
+               "Use cov_type='HC0' e use_t=False para a inferência robusta por Wald bilateral.")
+    add_bullet(document, "Apresente uma tabela final desse ajuste com coeficientes, erros-padrão, "
+               "OR, IC95%, valores-p e indicação de p<0,05. Interprete HvyAlcoholConsump usando "
+               "OR, IC95% e p em conjunto. Use notação científica para valores-p pequenos.")
     item(document, "7. Probabilidade, associação e limites", [
         "Em um exemplo hipotético, parta de p₀=0,20 e OR=2. Calcule as odds iniciais, "
         "as odds após o contraste e a nova probabilidade. A probabilidade dobrou? "
@@ -220,15 +226,16 @@ def build_document():
         "Os resultados deste exercício não validam uso clínico.",
     ])
     document.add_paragraph(
-        "As OR pertencem ao mesmo modelo regularizado do notebook. A conversão de escala "
-        "não elimina a regularização. Esta atividade não solicita IC95% nem valores-p; "
-        "não conclua significância estatística a partir das OR pontuais."
+        "Os valores-p e IC95% pertencem ao ajuste sem penalização e às OR dessa tabela final. "
+        "Os testes são exploratórios, sem correção para múltiplas comparações, e não incorporam "
+        "o desenho amostral do BRFSS. Significância não demonstra causalidade ou importância clínica; "
+        "p≥0,05 não prova ausência de associação."
     )
     document.add_heading("O que entregar", level=2)
     document.add_paragraph(
         "Entregue um arquivo .ipynb com identificação do(s) autor(es), os sete itens respondidos, "
-        "código executado, tabelas e interpretações. Registre as versões de Python, numpy, pandas "
-        "e scikit-learn e cite a fonte dos dados. Antes de entregar, reinicie o ambiente e execute "
+        "código executado, tabelas e interpretações. Registre as versões de Python, numpy, pandas, "
+        "scikit-learn e statsmodels e cite a fonte dos dados. Antes de entregar, reinicie o ambiente e execute "
         "todas as células em sequência."
     )
     document.add_paragraph(
