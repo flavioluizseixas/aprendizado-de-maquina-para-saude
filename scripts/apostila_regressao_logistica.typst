@@ -1,0 +1,30 @@
+#set document(title: [$title$], author: "$author$")
+#let azul = rgb("005373")
+#set page(paper: "a4", margin: 2.5cm, numbering: "1")
+#set text(font: "Calibri", size: 11.5pt, lang: "pt", region: "BR")
+#set par(justify: false, leading: 0.52em, spacing: 0.72em)
+#set heading(numbering: none)
+#show heading.where(level: 1): set text(size: 20pt, weight: "regular", fill: azul)
+#show heading.where(level: 2): set text(size: 15pt, weight: "regular", fill: azul)
+#show heading.where(level: 3): set text(size: 12pt, weight: "bold", fill: azul)
+#show link: set text(fill: azul)
+#set table(inset: 6pt, stroke: none,
+  fill: (x, y) => if y == 0 { rgb("EAF2F6") } else if calc.even(y) { rgb("F7F9FA") })
+#show table.cell.where(y: 0): set text(weight: "bold", fill: azul)
+#show table: set text(size: 10pt)
+#show figure.caption: set text(size: 9pt, fill: rgb("475569"))
+#set figure(supplement: none, numbering: none, gap: 8pt)
+#set quote(block: true)
+
+#text(size: 28pt, fill: azul)[$title$]
+#v(8pt)
+#text(size: 15pt, fill: azul)[$subtitle$]
+#v(8pt)
+#text[$author$]
+#linebreak()
+#text(size: 10pt)[$date$]
+#v(12pt)
+#outline(title: [Sumário], depth: 1)
+#pagebreak()
+
+$body$

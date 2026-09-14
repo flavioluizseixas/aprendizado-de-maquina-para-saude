@@ -21,6 +21,8 @@ Para uma introdução curta ao encontro 01, use a [versão mínima de estatísti
 
 Para uma introdução curta ao encontro 02, use a [versão mínima de regressão logística](notebooks/02_aprendizado_supervisionado_versão_minima.ipynb): split, padronização, treinamento, métricas, coeficientes, odds e odds ratios, com uma tabela final de IC95% e valores-p de um ajuste sem penalização, em sete células de código. O [enunciado da atividade em Word](tarefas/Tarefa_2_Aprendizado_Supervisionado_Versao_Minima.docx) acompanha esse roteiro.
 
+A [apostila didática de regressão logística (PDF)](outputs/apostilas/apostila_regressao_logistica.pdf) explica probabilidade, odds, odds ratio e coeficientes com um caso fictício, figuras e exercícios com gabarito. A proposta também está disponível em [Word editável](outputs/apostilas/apostila_regressao_logistica.docx) e [Markdown](outputs/apostilas/apostila_regressao_logistica.md).
+
 ## O que você aprenderá
 
 - exploração e visualização responsável de dados observacionais;
