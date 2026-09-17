@@ -21,6 +21,10 @@ Para uma introdução curta ao encontro 01, use a [versão mínima de estatísti
 
 Para uma introdução curta ao encontro 02, use a [versão mínima de regressão logística](notebooks/02_aprendizado_supervisionado_versão_minima.ipynb): split, padronização, treinamento, métricas, coeficientes, odds e odds ratios, com uma tabela final de IC95% e valores-p de um ajuste sem penalização, em sete células de código. O [enunciado da atividade em Word](tarefas/Tarefa_2_Aprendizado_Supervisionado_Versao_Minima.docx) acompanha esse roteiro.
 
+Para uma introdução curta ao encontro 03, use a [versão mínima de aprendizado não supervisionado](notebooks/03_aprendizado_nao_supervisionado_versão_minima.ipynb): padronização, K-means, inércia, silhouette, perfis e PCA em seis células de código, com uma amostra de 5.000 registros. O enunciado está disponível em [Word](tarefas/Tarefa_3_Aprendizado_Nao_Supervisionado_Versao_Minima.docx) e [Markdown](tarefas/Tarefa_3_Aprendizado_Nao_Supervisionado_Versao_Minima.md). Para regenerar o notebook e o Word a partir das fontes, execute `python scripts/create_task3_minimal.py` (requer `python-docx`).
+
+Como atividade adicional ao encontro 02, o [notebook de regressão logística com Heart Disease](notebooks/extra_regressao_logistica_coracao.ipynb) propõe seis células para grupos de 3–4 alunos: treino/teste, métricas, coeficientes, odds e OR com cinco atributos interpretáveis. O enunciado em [Word](tarefas/Atividade_Extra_Regressao_Logistica_Coracao.docx) e [Markdown](tarefas/Atividade_Extra_Regressao_Logistica_Coracao.md) distribui quatro focos de discussão para uma aula de 60–75 minutos. Regeneração: `python scripts/create_logistic_group_activity.py` (requer `python-docx`).
+
 A [apostila didática de regressão logística (PDF)](outputs/apostilas/apostila_regressao_logistica.pdf) explica probabilidade, odds, odds ratio e coeficientes com um caso fictício, figuras e exercícios com gabarito. A proposta também está disponível em [Word editável](outputs/apostilas/apostila_regressao_logistica.docx) e [Markdown](outputs/apostilas/apostila_regressao_logistica.md).
 
 ## O que você aprenderá
@@ -37,6 +41,7 @@ A [apostila didática de regressão logística (PDF)](outputs/apostilas/apostila
 ## Bases públicas
 
 - **CDC Diabetes Health Indicators**, disponibilizada pela [UCI](https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators), nos notebooks 01–04. Os indicadores vêm do BRFSS e incluem autorrelato.
+- **Heart Disease — Cleveland**, disponibilizada pela [UCI](https://archive.ics.uci.edu/dataset/45/heart+disease), na atividade adicional de regressão logística em grupos. O desfecho indica doença registrada na base, sem horizonte de previsão futura.
 - **PneumoniaMNIST**, do [MedMNIST](https://medmnist.com/), no notebook 05. As radiografias pediátricas foram reduzidas e pré-processadas; o conjunto não se destina a uso clínico.
 - **NCCTG Lung Cancer**, do pacote R `survival`, via [Rdatasets](https://vincentarelbundock.github.io/Rdatasets/doc/survival/lung.html), no notebook 06.
 - **InfoDengue**, pela [API pública](https://info.dengue.mat.br/tutorial_api_python/locale-en), nos notebooks 07–08. Os valores epidemiológicos podem ser revistos.

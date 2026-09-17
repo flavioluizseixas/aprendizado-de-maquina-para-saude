@@ -12,7 +12,10 @@ NOTEBOOKS = sorted((ROOT / "notebooks").glob("*.ipynb"))
 MINIMAL_NOTEBOOKS = {
     "01_estatistica_descritiva_versão_minima.ipynb",
     "02_aprendizado_supervisionado_versão_minima.ipynb",
+    "03_aprendizado_nao_supervisionado_versão_minima.ipynb",
 }
+ADDITIONAL_NOTEBOOKS = {"extra_regressao_logistica_coracao.ipynb"}
+COMPACT_NOTEBOOKS = MINIMAL_NOTEBOOKS | ADDITIONAL_NOTEBOOKS
 NOTICE_FRAGMENT = "finalidade exclusivamente educacional"
 
 
@@ -30,8 +33,8 @@ def validate_notebook(path: Path) -> list[str]:
     source_section = header.partition("## Fonte e licença")[2]
     if not source_section or "](" not in source_section:
         errors.append("fonte descritiva sem link no cabeçalho")
-    # As versões mínimas mantêm apenas o fluxo solicitado, sem as seções do roteiro completo.
-    if path.name not in MINIMAL_NOTEBOOKS:
+    # Versões mínimas e atividades adicionais têm roteiros próprios e mais curtos.
+    if path.name not in COMPACT_NOTEBOOKS:
         if "Três aprendizados principais" not in text:
             errors.append("síntese final ausente")
         if "Versões" not in text:
@@ -53,12 +56,12 @@ def validate_notebook(path: Path) -> list[str]:
 
 
 def main() -> None:
-    full_notebooks = [path for path in NOTEBOOKS if path.name not in MINIMAL_NOTEBOOKS]
+    full_notebooks = [path for path in NOTEBOOKS if path.name not in COMPACT_NOTEBOOKS]
     if len(full_notebooks) != 8:
         raise SystemExit(f"Esperados 8 notebooks completos; encontrados {len(full_notebooks)}.")
-    missing = MINIMAL_NOTEBOOKS - {path.name for path in NOTEBOOKS}
+    missing = COMPACT_NOTEBOOKS - {path.name for path in NOTEBOOKS}
     if missing:
-        raise SystemExit(f"Notebooks mínimos ausentes: {', '.join(sorted(missing))}.")
+        raise SystemExit(f"Notebooks mínimos/adicionais ausentes: {', '.join(sorted(missing))}.")
     failures = {path.name: validate_notebook(path) for path in NOTEBOOKS}
     failures = {name: errors for name, errors in failures.items() if errors}
     if failures:
