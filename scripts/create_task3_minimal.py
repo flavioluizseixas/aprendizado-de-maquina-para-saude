@@ -53,7 +53,7 @@ def build_notebook() -> dict:
 
             **Objetivo:** formar e interpretar grupos com K-means e visualizá-los com PCA. Execute as seis células de código em ordem. Reserve 40–50 minutos para a atividade completa.
 
-            Use o Colab ou Jupyter com `pandas`, `matplotlib` e `scikit-learn` instalados. Se necessário, execute `%pip install pandas matplotlib scikit-learn` em uma célula adicional. O carregamento requer internet; o notebook funciona sem clonar o repositório.
+            Use o Colab ou Jupyter com `pandas`, `matplotlib` e `scikit-learn` instalados. Se necessário, execute `%pip install pandas matplotlib scikit-learn` em uma célula adicional. O carregamento requer internet; o notebook funciona sem clonar o repositório. A primeira célula informa as etapas de importação e download; a conexão usa timeout de 30 segundos por operação de rede. Se nenhuma mensagem aparecer, reinicie o kernel e confirme o ambiente Python selecionado.
 
             ## Fonte e licença
 
@@ -76,6 +76,11 @@ def build_notebook() -> dict:
             Usaremos uma amostra aleatória de 5.000 registros, com semente 42, para uma execução leve. Excluímos eventuais ausências apenas nos atributos usados. A análise é exploratória nesta amostra, sem avaliação preditiva em um conjunto de teste.
         """),
         cell("code", """
+            print("1/3 — Importando bibliotecas...", flush=True)
+            from io import BytesIO
+            from urllib.error import URLError
+            from urllib.request import urlopen
+
             import pandas as pd
             import matplotlib.pyplot as plt
             from IPython.display import display
@@ -85,9 +90,19 @@ def build_notebook() -> dict:
             from sklearn.decomposition import PCA
 
             atributos = ["BMI", "Age", "GenHlth", "PhysHlth", "MentHlth", "Education", "Income"]
-            dados = pd.read_csv(
-                "https://archive.ics.uci.edu/static/public/891/data.csv", index_col="ID"
-            )
+            print("2/3 — Baixando dados da UCI (~13 MB)...", flush=True)
+            url = "https://archive.ics.uci.edu/static/public/891/data.csv"
+            try:
+                with urlopen(url, timeout=30) as resposta:
+                    conteudo = resposta.read()
+            except (URLError, TimeoutError, ConnectionError) as erro:
+                raise RuntimeError(
+                    "Não foi possível baixar os dados da UCI. Verifique a conexão "
+                    "com a internet e execute esta célula novamente."
+                ) from erro
+
+            print("3/3 — Lendo o CSV e selecionando a amostra...", flush=True)
+            dados = pd.read_csv(BytesIO(conteudo), index_col="ID")
             display(dados[atributos].isna().sum().to_frame("Ausências na base"))
             dados = dados.dropna(subset=atributos).sample(n=5_000, random_state=42).copy()
             X = dados[atributos]
@@ -157,6 +172,8 @@ def build_notebook() -> dict:
             ## 6. Visualizar com PCA
 
             O PCA projeta os atributos padronizados em dois componentes. **Os grupos já foram formados no espaço dos atributos; o PCA é usado apenas para visualização.** Observe a variância explicada: a projeção perde parte da informação, e a sobreposição no plano não resume todas as distâncias originais. Variância explicada não é acurácia.
+
+            O segundo gráfico mantém as mesmas coordenadas e cores dos clusters e distingue o indicador observado: círculos = sem diabetes (0); triângulos = pré-diabetes/diabetes (1). A legenda identifica cada combinação de cluster e indicador, com seu número de pessoas. São rótulos da base, não previsões do K-means; o indicador continua fora do agrupamento e do PCA.
         """),
         cell("code", """
             pca = PCA(n_components=2, svd_solver="full")
@@ -164,18 +181,49 @@ def build_notebook() -> dict:
             variancia = 100 * pca.explained_variance_ratio_
             print(f"PC1: {variancia[0]:.1f}% | PC2: {variancia[1]:.1f}% | Total: {variancia.sum():.1f}%")
 
+            grupos_pca = sorted(dados["Cluster"].unique())
+            cores = {grupo: f"C{indice % 10}" for indice, grupo in enumerate(grupos_pca)}
             fig, eixo = plt.subplots(figsize=(7, 4))
-            for grupo in sorted(dados["Cluster"].unique()):
+            for grupo in grupos_pca:
                 selecao = dados["Cluster"].to_numpy() == grupo
                 eixo.scatter(
                     coordenadas[selecao, 0], coordenadas[selecao, 1],
-                    s=10, alpha=0.35, label=f"Cluster {grupo}"
+                    s=10, alpha=0.35, color=cores[grupo], label=f"Cluster {grupo}"
                 )
             eixo.set(
                 title="Projeção dos clusters com PCA",
                 xlabel=f"PC1 ({variancia[0]:.1f}%)", ylabel=f"PC2 ({variancia[1]:.1f}%)"
             )
             eixo.legend()
+            plt.tight_layout()
+            plt.show()
+
+            fig, eixo = plt.subplots(figsize=(11, 5))
+            for grupo in grupos_pca:
+                for indicador, rotulo, marcador in [
+                    (0, "Sem diabetes", "o"),
+                    (1, "Pré-diabetes/diabetes", "^"),
+                ]:
+                    selecao = (
+                        (dados["Cluster"].to_numpy() == grupo)
+                        & (dados["Diabetes_binary"].to_numpy() == indicador)
+                    )
+                    eixo.scatter(
+                        coordenadas[selecao, 0], coordenadas[selecao, 1],
+                        color=cores[grupo], marker=marcador,
+                        s=14 if indicador == 0 else 30,
+                        alpha=0.25 if indicador == 0 else 0.8,
+                        zorder=2 if indicador == 0 else 3,
+                        label=f"Cluster {grupo} · {rotulo} (n={selecao.sum():,})"
+                    )
+            eixo.set(
+                title="PCA: clusters e indicador observado de diabetes",
+                xlabel=f"PC1 ({variancia[0]:.1f}%)", ylabel=f"PC2 ({variancia[1]:.1f}%)"
+            )
+            eixo.legend(
+                title="Cluster · Indicador da base", loc="upper left",
+                bbox_to_anchor=(1.02, 1), fontsize=8, markerscale=1.5
+            )
             plt.tight_layout()
             plt.show()
         """),
