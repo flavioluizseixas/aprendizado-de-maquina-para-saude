@@ -1,5 +1,12 @@
 # Registro de validação
 
+## 3 de outubro de 2026 — treinamento ampliado do experimento 05 mínimo
+
+- Mantidas as sete células, a arquitetura de 4.833 parâmetros, as divisões oficiais, a semente 42 e o limiar 0,5. Limite ampliado de 5 para 30 épocas; Adam com taxa inicial explícita de 0,001; EarlyStopping pela AUC de validação com paciência 5 e restauração dos melhores pesos; ReduceLROnPlateau pela mesma métrica, fator 0,5, paciência 2 e mínimo 0,00001. Notebook, gerador e enunciados Markdown/Word atualizados.
+- O ajuste foi conferido primeiro usando apenas treino e validação. Na mesma execução local, a AUC de validação passou de 0,8369 na época 5 para 0,9454 na época 30; a perda de validação caiu de 0,4688 para 0,2661. A taxa foi reduzida ao fim das épocas 24 e 26. O limite de 30 foi atingido, sem parada antecipada; isso não demonstra convergência. A restauração dos pesos foi conferida pela reavaliação da AUC de validação.
+- Após fixar a configuração, executadas as sete células e o exercício adicional de Grad-CAM em CPU, com o mesmo ambiente descrito abaixo. No teste: VN=142, FP=92, FN=22 e VP=368; acurácia=0,817, sensibilidade=0,944, especificidade=0,607 e ROC-AUC=0,919. Não houve ajuste posterior pelo teste. Resultados podem variar com hardware e versões.
+- Conferidos mapas finitos em [0, 1], dimensões 64 × 64, geração reproduzível do notebook e integridade/conteúdo atualizado do Word. `python scripts/validate_notebooks.py`: 13 notebooks aprovados; `nbformat.validate` e `git diff --check` aprovados. Notebook salvo sem saídas. Execução local, sem nova validação na interface do Colab.
+
 ## 3 de outubro de 2026 — experimento 05 e versão mínima
 
 - Reexecutado integralmente `05_imagens_gradcam.ipynb`, com `FAST_MODE=True`, em CPU: treinamento, avaliação e quatro mapas Grad-CAM concluídos. No teste oficial: VN=13, FP=221, FN=17 e VP=373; acurácia=0,619 e ROC-AUC=0,744.

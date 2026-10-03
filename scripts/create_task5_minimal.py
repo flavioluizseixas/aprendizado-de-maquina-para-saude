@@ -114,26 +114,35 @@ def build_notebook() -> dict:
             logit = tf.keras.layers.Dense(1, name="logit")(x)
             saida = tf.keras.layers.Activation("sigmoid")(logit)
             modelo = tf.keras.Model(entrada, saida)
-            modelo.compile(optimizer="adam", loss="binary_crossentropy", metrics=[tf.keras.metrics.AUC(name="auc")])
+            modelo.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3), loss="binary_crossentropy", metrics=[tf.keras.metrics.AUC(name="auc")])
             modelo.summary()
         """),
         cell("markdown", """
             ## 4. Treinamento e validação
 
-            Use todos os exemplos de treino e até cinco épocas. Early stopping acompanha a AUC de validação e restaura os pesos da melhor época. A AUC exibida durante o treinamento é uma aproximação do TensorFlow. O teste não participa desta escolha. Diferenças entre hardware e versões podem mudar os resultados mesmo com semente fixa.
+            Use todos os exemplos de treino e até 30 épocas. O limite anterior de cinco épocas podia interromper a rede ainda em aprendizado. Early stopping acompanha a AUC de validação, espera cinco épocas sem melhora e restaura os pesos da melhor época. Se a AUC estabilizar por duas épocas, a taxa de aprendizado cai pela metade, até o mínimo de 0,00001, para permitir ajustes menores dos pesos.
+
+            A AUC exibida durante o treinamento é uma aproximação do TensorFlow. O teste não participa dessas decisões. Mais épocas não garantem melhora; acompanhe também a perda de validação e a diferença entre treino e validação. Diferenças entre hardware e versões podem mudar os resultados mesmo com semente fixa. A 11 segundos por época, 30 épocas levam aproximadamente 5–6 minutos. Para reiniciar o treinamento do zero, execute novamente a célula 3 antes da 4.
         """),
         cell("code", """
-            parada = tf.keras.callbacks.EarlyStopping(monitor="val_auc", mode="max", patience=2, restore_best_weights=True)
-            historico = modelo.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=5, batch_size=64, callbacks=[parada], verbose=2)
+            EPOCAS = 30
+            parada = tf.keras.callbacks.EarlyStopping(monitor="val_auc", mode="max", patience=5, restore_best_weights=True, verbose=1)
+            reduzir_taxa = tf.keras.callbacks.ReduceLROnPlateau(monitor="val_auc", mode="max", factor=0.5, patience=2, min_lr=1e-5, verbose=1)
+            historico = modelo.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=EPOCAS, batch_size=64, callbacks=[reduzir_taxa, parada], verbose=2)
             curvas = pd.DataFrame(historico.history)
             curvas.index = np.arange(1, len(curvas) + 1)
-            print("Melhor época pela AUC de validação:", int(curvas["val_auc"].idxmax()))
+            melhor_epoca = int(curvas["val_auc"].idxmax())
+            print(f"Épocas executadas: {len(curvas)}/{EPOCAS}")
+            print(f"Melhor época pela AUC de validação: {melhor_epoca} | AUC: {curvas.loc[melhor_epoca, 'val_auc']:.4f}")
+            print("Pesos da melhor época restaurados para avaliação e Grad-CAM.")
+            if melhor_epoca == EPOCAS:
+                print("A melhor época foi a última: o limite foi atingido; isso não demonstra convergência.")
             fig, eixos = plt.subplots(1, 2, figsize=(10, 3))
             curvas[["loss", "val_loss"]].plot(ax=eixos[0], title="Erro (entropia cruzada)")
             curvas[["auc", "val_auc"]].plot(ax=eixos[1], title="AUC")
             for eixo in eixos:
                 eixo.set_xlabel("Época")
-                eixo.set_xticks(curvas.index)
+                eixo.set_xticks(sorted({1, len(curvas), *range(5, len(curvas) + 1, 5)}))
             plt.tight_layout()
             plt.show()
         """),
@@ -213,7 +222,7 @@ def build_notebook() -> dict:
             ## Atividade e entrega
 
             1. Informe as contagens e a proporção de pneumonia em cada divisão. Explique suas funções e o desbalanceamento.
-            2. Identifique a melhor época pela validação e comente as curvas. O que elas permitem dizer sobre sobreajuste em apenas cinco épocas?
+            2. Informe as épocas executadas, a melhor época pela validação e se houve redução da taxa de aprendizado. Compare a AUC de validação na quinta época com a melhor observada (se houver ao menos cinco épocas). Comente as curvas e explique por que aumentar o limite não garante melhora nem ausência de sobreajuste.
             3. Registre VN, FP, FN, VP, sensibilidade, especificidade, precisão, F1, acurácia e ROC-AUC. Compare a acurácia com a referência majoritária. Qual erro o modelo comete mais?
             4. Compare os mapas de um acerto e um erro, quando disponíveis. Informe índice, rótulos e saída do modelo. Discuta bordas, regiões difusas e possíveis atalhos sem afirmar localização de lesão.
             5. Duplique a célula 7 e, na cópia, insira `selecionados = proximos` imediatamente antes de `for i in selecionados:`. Compare os dois casos mais próximos de 0,5 e suas distâncias ao limiar. Eles podem ainda estar longe de 0,5. Explique por que cor do mapa e saída probabilística respondem a perguntas diferentes. Não retreine o modelo.
@@ -222,7 +231,7 @@ def build_notebook() -> dict:
 
             **Limites:** população pediátrica, perda de detalhes em 64 × 64 e possíveis diferenças entre instituições. Grad-CAM investiga o escore da rede; não confirma doença, causalidade ou validade clínica. O conjunto não contém máscaras de lesão para validar localização neste exercício.
 
-            **Referências:** [MedMNIST v2](https://www.nature.com/articles/s41597-022-01721-8), [Grad-CAM — artigo original](https://openaccess.thecvf.com/content_ICCV_2017/html/Selvaraju_Grad-CAM_Visual_Explanations_ICCV_2017_paper.html) e [exemplo oficial Keras](https://keras.io/examples/vision/grad_cam/).
+            **Referências:** [MedMNIST v2](https://www.nature.com/articles/s41597-022-01721-8), [Grad-CAM — artigo original](https://openaccess.thecvf.com/content_ICCV_2017/html/Selvaraju_Grad-CAM_Visual_Explanations_ICCV_2017_paper.html), [exemplo oficial Keras](https://keras.io/examples/vision/grad_cam/), [EarlyStopping](https://keras.io/api/callbacks/early_stopping/) e [ReduceLROnPlateau](https://keras.io/api/callbacks/reduce_lr_on_plateau/).
         """),
     ]
     for i, entry in enumerate(cells):

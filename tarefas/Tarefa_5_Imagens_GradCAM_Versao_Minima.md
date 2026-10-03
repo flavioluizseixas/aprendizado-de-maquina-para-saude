@@ -15,7 +15,7 @@ Fonte: [PneumoniaMNIST — MedMNIST](https://medmnist.com/), com radiografias pe
 - Imagens em tons de cinza, reduzidas para 64 × 64 pixels, com valores divididos por 255.
 - Rótulos: 0 = normal; 1 = pneumonia, a classe positiva.
 - Divisões oficiais: 4.708 imagens de treino, 524 de validação e 624 de teste. Não faça uma nova divisão.
-- CNN com duas convoluções, até cinco épocas, batch size 64 e semente 42. Early stopping acompanha a AUC de validação, com paciência 2, e restaura os melhores pesos.
+- CNN com duas convoluções, até 30 épocas, batch size 64 e semente 42. Adam começa com taxa de aprendizado 0,001. Early stopping acompanha a AUC de validação, com paciência 5, e restaura os melhores pesos. Após duas épocas sem melhora suficiente da AUC de validação, ReduceLROnPlateau reduz a taxa pela metade, até o mínimo de 0,00001.
 - Limiar previamente fixado em 0,5; Grad-CAM calculado para o escore de pneumonia antes da sigmoide, em todos os exemplos.
 
 ## Roteiro e questões
@@ -26,7 +26,9 @@ Execute as células 1 e 2. Apresente a quantidade de cada classe e o percentual 
 
 ### 2. Modelo e treinamento
 
-Execute as células 3 e 4. Explique, em linguagem própria, o papel das convoluções, do pooling e da sigmoide. Registre quantas épocas foram executadas e qual teve a maior AUC de validação. Analise as curvas de erro e AUC: há sinais de diferença entre treino e validação? Evite concluir que cinco épocas garantem ausência de sobreajuste. O teste não pode orientar a escolha da época, do modelo ou do limiar.
+Execute as células 3 e 4. Explique, em linguagem própria, o papel das convoluções, do pooling e da sigmoide. Registre quantas épocas foram executadas, qual teve a maior AUC de validação e se houve redução da taxa de aprendizado. Compare a AUC de validação na quinta época com a melhor observada, se houver ao menos cinco épocas. Analise as curvas de erro e AUC: há sinais de diferença entre treino e validação? A melhor época coincidir com a última sugere que o limite pode ter sido atingido antes da estabilização, mas aumentar o limite não garante melhora nem ausência de sobreajuste. O teste não pode orientar a escolha da época, do modelo ou do limiar.
+
+O treinamento pode terminar antes de 30 épocas por parada antecipada. A 11 segundos por época, o limite representa aproximadamente 5–6 minutos. Para começar do zero, execute a célula 3 antes da 4; repetir apenas a célula 4 continua a partir dos pesos atuais.
 
 ### 3. Desempenho no teste
 
@@ -63,3 +65,5 @@ Material com finalidade exclusivamente educacional. Os resultados não devem ori
 - [MedMNIST v2 — Scientific Data](https://www.nature.com/articles/s41597-022-01721-8)
 - [Grad-CAM — Selvaraju et al., ICCV 2017](https://openaccess.thecvf.com/content_ICCV_2017/html/Selvaraju_Grad-CAM_Visual_Explanations_ICCV_2017_paper.html)
 - [Exemplo oficial de Grad-CAM — Keras](https://keras.io/examples/vision/grad_cam/)
+- [EarlyStopping — Keras](https://keras.io/api/callbacks/early_stopping/)
+- [ReduceLROnPlateau — Keras](https://keras.io/api/callbacks/reduce_lr_on_plateau/)
