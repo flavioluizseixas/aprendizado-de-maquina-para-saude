@@ -271,7 +271,10 @@ def add_inline(paragraph, text: str) -> None:
             paragraph.add_run(part)
 
 
-def build_document() -> Document:
+def build_document(
+    task_path: Path = TASK,
+    title: str = "Atividade 3 — Aprendizado não supervisionado | Versão mínima",
+) -> Document:
     document = Document()
     style_document(document)
     configure_section(document.sections[0])
@@ -284,10 +287,10 @@ def build_document() -> Document:
     header.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     add_text(header, "APRENDIZADO DE MÁQUINA PARA SAÚDE", bold=True, color=TEAL, size=8)
     add_page_number(document.sections[0].footer.paragraphs[0])
-    document.core_properties.title = "Atividade 3 — Aprendizado não supervisionado | Versão mínima"
+    document.core_properties.title = title
     document.core_properties.language = "pt-BR"
 
-    for block in TASK.read_text(encoding="utf-8").strip().split("\n\n"):
+    for block in task_path.read_text(encoding="utf-8").strip().split("\n\n"):
         if block.startswith("#"):
             prefix, title = block.split(" ", 1)
             document.add_heading(title, level=len(prefix) - 1)
