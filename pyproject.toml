@@ -51,6 +51,7 @@ reinforcement = [
 ]
 time-series = [
   "statsmodels>=0.14,<1",
+  "tensorflow>=2.16,<3",
   "jupyterlab>=4,<5",
 ]
 notebooks = [

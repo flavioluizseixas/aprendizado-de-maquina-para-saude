@@ -14,6 +14,7 @@ MINIMAL_NOTEBOOKS = {
     "02_aprendizado_supervisionado_versão_minima.ipynb",
     "03_aprendizado_nao_supervisionado_versão_minima.ipynb",
     "05_imagens_gradcam_versão_minima.ipynb",
+    "08_series_temporais_versão_minima.ipynb",
 }
 ADDITIONAL_NOTEBOOKS = {"extra_regressao_logistica_coracao.ipynb"}
 COMPACT_NOTEBOOKS = MINIMAL_NOTEBOOKS | ADDITIONAL_NOTEBOOKS

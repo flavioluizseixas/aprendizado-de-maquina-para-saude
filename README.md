@@ -29,6 +29,8 @@ Como atividade adicional ao encontro 02, o [notebook de regressão logística co
 
 A [apostila didática de regressão logística (PDF)](outputs/apostilas/apostila_regressao_logistica.pdf) explica probabilidade, odds, odds ratio e coeficientes com um caso fictício, figuras e exercícios com gabarito. A proposta também está disponível em [Word editável](outputs/apostilas/apostila_regressao_logistica.docx) e [Markdown](outputs/apostilas/apostila_regressao_logistica.md).
 
+Para uma atividade curta do encontro 08, use a [versão mínima de séries temporais](notebooks/08_series_temporais_versão_minima.ipynb): sequências de quatro semanas, treino/validação/teste cronológicos, SimpleRNN que aprende uma correção sobre a última semana, parada antecipada e comparação com a última semana e a média móvel em seis células de código. A proposta dura 45–60 minutos, em duplas, com oito perguntas e um desafio opcional. O enunciado está disponível em [Word](tarefas/Tarefa_8_Series_Temporais_Versao_Minima.docx) e [Markdown](tarefas/Tarefa_8_Series_Temporais_Versao_Minima.md), acompanhado de [orientações para o professor](tarefas/Tarefa_8_Series_Temporais_Orientacoes_Professor.md). Para regenerar notebook e Word, execute `python scripts/create_task8_minimal.py` (requer `python-docx`).
+
 ## O que você aprenderá
 
 - exploração e visualização responsável de dados observacionais;
